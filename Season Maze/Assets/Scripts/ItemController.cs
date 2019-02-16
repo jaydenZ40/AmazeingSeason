@@ -7,7 +7,7 @@ public class ItemController : MonoBehaviour
     private bool isFollowingPlayer = false;
 
 
-    void Start()
+    void Awake()
     {
         PlayerController.instance.onOperateItem.AddListener(OperateItem);
     }

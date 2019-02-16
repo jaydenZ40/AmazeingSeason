@@ -47,7 +47,13 @@ public class PlayerController : MonoBehaviour
             itemName = "";
         }
     }
-
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform.CompareTag("WrapGate"))
+        {
+            onWrapGate.Invoke(); // send to levelController to show options of 4 seasons in a panel
+        }
+    }
     void OnTriggerStay2D(Collider2D other)
     {
         if (itemName == "") // cannot pick two or more items at same time?
@@ -60,10 +66,6 @@ public class PlayerController : MonoBehaviour
 
                 itemName = other.transform.name;
             }
-        }
-        if (other.transform.CompareTag("WrapGate"))
-        {
-            onWrapGate.Invoke(); // send to levelController to show options of 4 seasons in a panel
         }
     }
 }
