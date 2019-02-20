@@ -6,12 +6,12 @@ public class ButtonsController : MonoBehaviour
 {
     public void OnSpring()
     {
-        PlayerController.instance.rb.transform.position = new Vector3(-1.5f, 1.5f, 0);
+        PlayerController.instance.rb.transform.position = new Vector3(-1.5f, 2.5f, 0);
         HideSeasonPanel();
     }
     public void OnSummer()
     {
-        PlayerController.instance.rb.transform.position = new Vector3(1.5f, 1.5f, 0);
+        PlayerController.instance.rb.transform.position = new Vector3(2.5f, 2.5f, 0);
         HideSeasonPanel();
     }
     public void OnFall()
@@ -21,7 +21,7 @@ public class ButtonsController : MonoBehaviour
     }
     public void OnWinter()
     {
-        PlayerController.instance.rb.transform.position = new Vector3(1.5f, -1.5f, 0);
+        PlayerController.instance.rb.transform.position = new Vector3(2.5f, -1.5f, 0);
         HideSeasonPanel();
     }
     void HideSeasonPanel()

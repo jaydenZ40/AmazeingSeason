@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     {
         instance = this;
         PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
+        Physics2D.IgnoreLayerCollision(8, 9);
     }
     void ShowSeasonPanel()
     {

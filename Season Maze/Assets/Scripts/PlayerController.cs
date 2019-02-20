@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class StringUnityEvent : UnityEvent<string> { }
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
     public Rigidbody2D rb;
     public float moveSpeed = 2.5f;
-    public string itemName = "";
+    public string elementName = "empty";
     public UnityEvent onWrapGate = new UnityEvent();
-    public UnityEvent onOperateItem = new UnityEvent();
+    public StringUnityEvent onOperateElement = new StringUnityEvent();
 
 
 
@@ -38,13 +39,13 @@ public class PlayerController : MonoBehaviour
         {
             rb.transform.Translate(new Vector2(0, -1 * Time.deltaTime * moveSpeed));
         }
-        if (Input.GetKeyDown(KeyCode.Space) && itemName != "")
+        if (Input.GetKeyDown(KeyCode.Space) && elementName != "empty")
         {
-            onOperateItem.Invoke();  // drop down the item, pass event to ItemController maybe
+            onOperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
 
-            // clear the item box?
+            // clear the Element box?
 
-            itemName = "";
+            elementName = "empty";
         }
     }
     void OnTriggerEnter2D(Collider2D other)
@@ -56,15 +57,14 @@ public class PlayerController : MonoBehaviour
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        if (itemName == "") // cannot pick two or more items at same time?
+        if (elementName == "empty") // cannot pick two or more Elements at same time
         {
-            if (Input.GetKeyDown(KeyCode.Space) && other.transform.CompareTag("Item"))
+            if (Input.GetKeyDown(KeyCode.Space) && other.transform.CompareTag("Element"))
             {
-                onOperateItem.Invoke(); // pick up the item,  pass event to in ItemController maybe
+                elementName = other.transform.name;
+                onOperateElement.Invoke(elementName); // pick up the Element,  pass event to in ElementController maybe
 
-                // show it on an item box?
-
-                itemName = other.transform.name;
+                // add code here to show it on an Element box?
             }
         }
     }
