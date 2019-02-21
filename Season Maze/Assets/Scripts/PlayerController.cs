@@ -23,6 +23,15 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Move();
+        if (Input.GetKeyDown(KeyCode.Space) && elementName != "empty")
+        {
+            DropElement();
+        }
+    }
+
+    void Move()
+    {
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             rb.transform.Translate(new Vector2(-1 * Time.deltaTime * moveSpeed, 0));
@@ -39,15 +48,17 @@ public class PlayerController : MonoBehaviour
         {
             rb.transform.Translate(new Vector2(0, -1 * Time.deltaTime * moveSpeed));
         }
-        if (Input.GetKeyDown(KeyCode.Space) && elementName != "empty")
-        {
-            onOperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
-
-            // clear the Element box?
-
-            elementName = "empty";
-        }
     }
+
+    void DropElement()
+    {
+        onOperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
+
+        // clear the Element box?
+
+        elementName = "empty";
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.CompareTag("WrapGate"))
@@ -55,6 +66,7 @@ public class PlayerController : MonoBehaviour
             onWrapGate.Invoke(); // send to levelController to show options of 4 seasons in a panel
         }
     }
+
     void OnTriggerStay2D(Collider2D other)
     {
         if (elementName == "empty") // cannot pick two or more Elements at same time
