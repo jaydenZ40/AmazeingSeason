@@ -8,11 +8,13 @@ public class GameController : MonoBehaviour
 
     public static GameController instance;
     public GameObject SeasonPanel;
-    void Start() // a bug when uses Awake instead of Start...?!
+    public GameObject Element;
+
+    void Awake()
     {
         instance = this;
         PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
-        //CheckElementHolder.instance.onCompleteSeason.AddListener(CheckProcess);
+        ElementController.checkProcess.AddListener(CheckSeason);
         Physics2D.IgnoreLayerCollision(8, 9);
     }
 
@@ -22,29 +24,33 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    //void CheckProcess(char c)
-    //{
-    //    string season = "";
-    //    switch (c)
-    //    {
-    //        case 'p':
-    //            season = "Spring";
-    //            break;
-    //        case 'u':
-    //            season = "Summer";
-    //            break;
-    //        case 'a':
-    //            season = "Fall";
-    //            break;
-    //        case 'i':
-    //            season = "Winter";
-    //            break;
-    //    }
-    //    completedSeason++;
-    //    print("Seasons " + season + " completed!"); // edit here: something happens for this season.
-    //    if (completedSeason == 4)
-    //    {
-    //        print("All seasons completed!"); // edit here: something happens, load another scene
-    //    }
-    //}
+    void CheckSeason(char c)
+    {
+        print(c);
+        int season = 0;
+        switch (c)
+        {
+            case 'p':
+                season = 0;
+                break;
+            case 'u':
+                season = 1;
+                break;
+            case 'a':
+                season = 2;
+                break;
+            case 'i':
+                season = 3;
+                break;
+        }
+        if (Element.transform.GetChild(season).childCount == 0)
+        {
+            completedSeason++;
+            print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
+        }
+        if (completedSeason == 4)
+        {
+            print("All seasons completed!"); // edit here: something happens, load another scene
+        }
+    }
 }

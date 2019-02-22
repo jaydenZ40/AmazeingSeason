@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void DropElement()
+    public void DropElement()
     {
         onOperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
 
