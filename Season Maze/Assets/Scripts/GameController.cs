@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -26,7 +27,6 @@ public class GameController : MonoBehaviour
 
     void CheckSeason(char c)
     {
-        print(c);
         int season = 0;
         switch (c)
         {
@@ -51,6 +51,7 @@ public class GameController : MonoBehaviour
         if (completedSeason == 4)
         {
             print("All seasons completed!"); // edit here: something happens, load another scene
+            SceneManager.LoadScene(2);
         }
     }
 }

@@ -16,12 +16,10 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        print(Time.deltaTime);
         timeLeft -= Time.deltaTime;
         int mins = (int)(timeLeft / 60f);
         int sec = (int)(timeLeft % 60);
         timeText.text = string.Format("Timer: {0:00}", mins + ":" + sec);
-        print(mins + " " + sec);
         if (timeLeft <= 0)
         {
             print("game over");
