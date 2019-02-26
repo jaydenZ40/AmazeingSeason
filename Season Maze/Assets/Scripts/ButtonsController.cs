@@ -52,6 +52,7 @@ public class ButtonsController : MonoBehaviour
 
     public void OnRestart()
     {
+        Pause.instance.TogglePause();
         SceneManager.LoadScene(1);
     }
 }
