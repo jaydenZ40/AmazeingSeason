@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
 public class Timer : MonoBehaviour
 {
     private TextMeshProUGUI timeText;
-    public float timeLeft = 120f; // 2 mins per round?
+    public float timeLeft = 180f; // 3 mins per round?
 
     void Awake()
     {
@@ -23,7 +24,8 @@ public class Timer : MonoBehaviour
         if (timeLeft <= 0)
         {
             print("game over");
-            // something happens, load another scene
+            SceneManager.LoadScene(3);
+            // something happens?
         }
     }
 }
