@@ -82,7 +82,6 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            print(elementName[1] + " " + elementBox.transform.GetChild(i).name[1]);
             if (elementBox.transform.GetChild(i).name[1] == elementName[1])
             {
                 curElementBox = elementBox.transform.GetChild(i).gameObject;

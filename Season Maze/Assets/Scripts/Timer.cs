@@ -8,7 +8,7 @@ using TMPro;
 public class Timer : MonoBehaviour
 {
     private TextMeshProUGUI timeText;
-    public float timeLeft = 180f; // 3 mins per round?
+    public float timeLeft = 240f; // 4 mins per round?
 
     void Awake()
     {
