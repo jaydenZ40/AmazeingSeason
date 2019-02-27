@@ -11,10 +11,10 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 2.5f;
     public string elementName = "empty";
     public UnityEvent onWrapGate = new UnityEvent();
-    public StringUnityEvent onOperateElement = new StringUnityEvent();
+    public StringUnityEvent OperateElement = new StringUnityEvent();
+    public GameObject elementBox;
 
-
-
+    private GameObject curElementBox;
     void Awake()
     {
         instance = this;
@@ -52,10 +52,8 @@ public class PlayerController : MonoBehaviour
 
     public void DropElement()
     {
-        onOperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
-
-        // clear the Element box?
-
+        OperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
+        HideElement();
         elementName = "empty";
     }
 
@@ -74,10 +72,28 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && other.transform.CompareTag("Element"))
             {
                 elementName = other.transform.name;
-                onOperateElement.Invoke(elementName); // pick up the Element,  pass event to in ElementController maybe
-
-                // add code here to show it on an Element box?
+                OperateElement.Invoke(elementName); // pick up the Element,  pass event to in ElementController maybe
+                ShowElement();
             }
         }
+    }
+
+    void ShowElement()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            print(elementName[1] + " " + elementBox.transform.GetChild(i).name[1]);
+            if (elementBox.transform.GetChild(i).name[1] == elementName[1])
+            {
+                curElementBox = elementBox.transform.GetChild(i).gameObject;
+                elementBox.transform.GetChild(i).gameObject.SetActive(true);
+                break;
+            }
+        }
+    }
+
+    public void HideElement()
+    {
+        curElementBox.SetActive(false);
     }
 }
