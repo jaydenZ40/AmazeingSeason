@@ -52,7 +52,12 @@ public class ButtonsController : MonoBehaviour
 
     public void OnRestart()
     {
-        Pause.instance.TogglePause();
+        Time.timeScale = 1;
         SceneManager.LoadScene(1);
+    }
+
+    public void OnMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

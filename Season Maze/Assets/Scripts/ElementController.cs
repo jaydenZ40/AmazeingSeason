@@ -41,7 +41,7 @@ public class ElementController : MonoBehaviour
     {
         if (other.transform.CompareTag("ElementHolder") && this.name[1] == other.name[1])
         {
-            PlayerController.instance.HideElement();
+            PlayerController.instance.HideIcon();
             this.transform.position = other.transform.position;
             this.transform.SetParent(restoredElements.transform);
             isFollowingPlayer = !isFollowingPlayer;
