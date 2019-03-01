@@ -27,22 +27,7 @@ public class GameController : MonoBehaviour
 
     void CheckSeason(char c)
     {
-        int season = 0;
-        switch (c)
-        {
-            case 'p':
-                season = 0;
-                break;
-            case 'u':
-                season = 1;
-                break;
-            case 'a':
-                season = 2;
-                break;
-            case 'i':
-                season = 3;
-                break;
-        }
+        int season = PlayerController.instance.TranslateLetter(c);
         if (Element.transform.GetChild(season).childCount == 0)
         {
             completedSeason++;

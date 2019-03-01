@@ -11,9 +11,11 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 2.5f;
     public string elementName = "empty";
     public UnityEvent onWrapGate = new UnityEvent();
-    public StringUnityEvent onOperateElement = new StringUnityEvent();
+    public StringUnityEvent OperateElement = new StringUnityEvent();
+    public GameObject elementHolder, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
 
-
+    private GameObject curElementBox;
+    private bool[] haveKeys = new bool[4] { false, false, false, false };
 
     void Awake()
     {
@@ -52,18 +54,38 @@ public class PlayerController : MonoBehaviour
 
     public void DropElement()
     {
-        onOperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
-
-        // clear the Element box?
-
+        OperateElement.Invoke("empty");  // drop down the Element, player holds nothing(empty)
+        HideIcon();
         elementName = "empty";
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.transform.CompareTag("Lock"))
+        {
+            int num = TranslateLetter(other.gameObject.name[1]);
+            if (haveKeys[num])
+            {
+                haveKeys[num] = false;
+                keyHolder.transform.GetChild(num).gameObject.SetActive(false);  // should I remove used key?
+                lockHolder.transform.GetChild(num).gameObject.SetActive(false); // remove lock after opening
+            }
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.transform.CompareTag("WrapGate"))
+        if (other.transform.CompareTag("WarpGate"))
         {
             onWrapGate.Invoke(); // send to levelController to show options of 4 seasons in a panel
+        }
+
+        if (other.transform.CompareTag("Key"))
+        {
+            int num = TranslateLetter(other.name[1]);
+            haveKeys[num] = true;
+            keyHolder.transform.GetChild(num).gameObject.SetActive(true);   // show icon
+            keyParent.transform.GetChild(num).gameObject.SetActive(false);  // hide gameobject
         }
     }
 
@@ -74,10 +96,44 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && other.transform.CompareTag("Element"))
             {
                 elementName = other.transform.name;
-                onOperateElement.Invoke(elementName); // pick up the Element,  pass event to in ElementController maybe
-
-                // add code here to show it on an Element box?
+                OperateElement.Invoke(elementName); // pick up the Element, pass event to in ElementController
+                ShowIcon();
             }
+        }
+    }
+
+    void ShowIcon()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (elementHolder.transform.GetChild(i).name[1] == elementName[1])
+            {
+                curElementBox = elementHolder.transform.GetChild(i).gameObject;
+                elementHolder.transform.GetChild(i).gameObject.SetActive(true);
+                break;
+            }
+        }
+    }
+
+    public void HideIcon()
+    {
+        curElementBox.SetActive(false);
+    }
+
+    public int TranslateLetter(char c)
+    {
+        switch (c)
+        {
+            case 'p':
+                return 0;
+            case 'u':
+                return 1;
+            case 'a':
+                return 2;
+            case 'i':
+                return 3;
+            default:
+                return -1;
         }
     }
 }
