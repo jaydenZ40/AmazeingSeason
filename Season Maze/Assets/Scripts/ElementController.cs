@@ -15,7 +15,7 @@ public class ElementController : MonoBehaviour
     public static CharUnityEvent checkProcess = new CharUnityEvent();
     void Start()
     {
-        PlayerController.instance.OperateElement.AddListener(OnOperateElement);
+        PlayerController.instance.onOperateElement.AddListener(OnOperateElement);
     }
 
     void OnOperateElement(string str)
@@ -41,7 +41,6 @@ public class ElementController : MonoBehaviour
     {
         if (other.transform.CompareTag("ElementHolder") && this.name[1] == other.name[1])
         {
-            PlayerController.instance.HideIcon();
             this.transform.position = other.transform.position;
             this.transform.SetParent(restoredElements.transform);
             isFollowingPlayer = !isFollowingPlayer;
