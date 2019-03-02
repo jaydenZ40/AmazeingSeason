@@ -32,6 +32,10 @@ public class Wizard : MonoBehaviour
         StartCoroutine(zapAnimation());
     }
 
+    public void appear()
+    {
+    }
+
     IEnumerator zapAnimation()
     {
         for (int i = 1; i < 4; i++)
@@ -45,5 +49,13 @@ public class Wizard : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         m_Sprite.sprite = m_Sprites[0];
+    }
+
+    IEnumerator appearAnimation()
+    {
+        for (int i = 1; i < 10; i++)
+        {
+            yield return new WaitForSeconds(0.05f);
+        }
     }
 }

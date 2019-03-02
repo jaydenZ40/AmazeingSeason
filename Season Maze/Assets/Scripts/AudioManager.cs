@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
-    public AudioSource m_BGM_Manager, m_SFX_KeyPickup, m_SFX_ElementPickup, m_SFX_ElementReturn, m_SFX_UnlockDoor;
+    public AudioSource m_BGM_Manager, m_SFX_KeyPickup, m_SFX_ElementPickup, 
+        m_SFX_ElementReturn, m_SFX_UnlockDoor, m_DLG_Zorton, m_SFX_Spaceship;
     private float timer = 0;
+    public UnityEvent zortonComplete = new UnityEvent();
+    private bool BGM_Started = false;
+    private bool BGM_Stopped = false;
     void Awake()
     {
         if (null == instance)
@@ -28,14 +33,34 @@ public class AudioManager : MonoBehaviour
     {
         timer += Time.deltaTime;
         //Debug.Log("timer = " + timer.ToString("0.0000"));
-        if (60 < timer)
+        if (60 < timer && !BGM_Stopped)
         {
             timer = 0;
             StartCoroutine(IncreasePitch());
         }
+        if (!BGM_Started && !m_DLG_Zorton.isPlaying)
+        {
+            BGM_Started = true;
+            BGM_Play();
+            zortonComplete.Invoke();
+        }
+
     }
 
-    IEnumerator IncreasePitch()
+    public void BGM_Play(bool play = true)
+    {
+        BGM_Stopped = play;
+        if (play)
+            m_BGM_Manager.Play();
+        else
+        {
+            m_BGM_Manager.Stop();
+            StopAllCoroutines();
+        }
+
+        }
+
+        IEnumerator IncreasePitch()
     {
         //Increase pitch 10 percent and restart
         for (int i = 0; 0 < m_BGM_Manager.volume; i++)
@@ -69,5 +94,19 @@ public class AudioManager : MonoBehaviour
     public void unlockDoor()
     {
         m_SFX_UnlockDoor.GetComponent<AudioSource>().Play();
+    }
+
+    public void spaceship(bool play)
+    {
+        if(play)
+            m_SFX_Spaceship.GetComponent<AudioSource>().Play();
+        else
+            m_SFX_Spaceship.GetComponent<AudioSource>().Stop();
+    }
+
+    public void spaceshipVolume()
+    {
+        var v = m_SFX_Spaceship.volume;
+        m_SFX_Spaceship.volume = v * 0.95f;
     }
 }
