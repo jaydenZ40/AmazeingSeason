@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioManager instance { get; private set; }
-    public AudioSource m_BGM_Manager, m_SFX_Manager;
+    public static AudioManager instance { get; private set; }
+    public AudioSource m_BGM_Manager, m_SFX_KeyPickup, m_SFX_ElementPickup, m_SFX_ElementReturn, m_SFX_UnlockDoor;
     private float timer = 0;
     void Awake()
     {
@@ -14,6 +14,13 @@ public class AudioManager : MonoBehaviour
         else
             Destroy(this.gameObject);
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Start()
+    {
+        PlayerController.instance.onKeyPickup.AddListener(pickupKey);
+        PlayerController.instance.onElementPickup.AddListener(pickupElement);
+        PlayerController.instance.onElementReturn.AddListener(returnElement);
     }
 
     // Update is called once per frame
@@ -44,5 +51,23 @@ public class AudioManager : MonoBehaviour
             m_BGM_Manager.volume += 0.01f;
             yield return new WaitForSeconds(0.05f);
         }
+    }
+
+    void pickupKey()
+    {
+        m_SFX_KeyPickup.GetComponent<AudioSource>().Play();
+    }
+    void pickupElement()
+    {
+        m_SFX_ElementPickup.GetComponent<AudioSource>().Play();
+    }
+    void returnElement()
+    {
+        m_SFX_ElementReturn.GetComponent<AudioSource>().Play();
+    }
+
+    public void unlockDoor()
+    {
+        m_SFX_UnlockDoor.GetComponent<AudioSource>().Play();
     }
 }
