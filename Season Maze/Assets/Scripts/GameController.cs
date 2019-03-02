@@ -6,10 +6,13 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     private int completedSeason = 0;
+    private bool isFlash = false;
 
     public static GameController instance;
     public GameObject SeasonPanel;
     public GameObject Element;
+    public GameObject MainCamera;
+    public GameObject FlashImage;
 
     void Awake()
     {
@@ -31,12 +34,27 @@ public class GameController : MonoBehaviour
         if (Element.transform.GetChild(season).childCount == 0)
         {
             completedSeason++;
-            print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
+            //print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
         }
-        if (completedSeason == 4)
+        if (completedSeason == 1)
         {
-            print("All seasons completed!"); // edit here: something happens, load another scene
-            SceneManager.LoadScene(2);
+            //print("All seasons completed!"); // edit here: something happens, load another scene
+            MainCamera.transform.parent = null;
+            MainCamera.transform.position = new Vector3(0, 0, -10);
+            Invoke("LoadVictory", 3);
+            for (float i = 0.125f; i < 3; i += 0.125f)
+            {
+                Invoke("Flash", i);
+            }
         }
+    }
+    void LoadVictory()
+    {
+        SceneManager.LoadScene(2);
+    }
+    void Flash()
+    {
+        FlashImage.SetActive(!isFlash);
+        isFlash = !isFlash;
     }
 }
