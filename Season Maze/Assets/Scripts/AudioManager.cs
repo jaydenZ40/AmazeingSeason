@@ -30,7 +30,7 @@ public class AudioManager : MonoBehaviour
 
     IEnumerator IncreasePitch()
     {
-        //Increase pitch 10 percent by 1 percent increments
+        //Increase pitch 10 percent and restart
         for (int i = 0; 0 < m_BGM_Manager.volume; i++)
         {
             m_BGM_Manager.volume -= 0.01f;
