@@ -10,6 +10,7 @@ public class Wizard : MonoBehaviour
     private SpriteRenderer m_Sprite;
     [SerializeField]
     private Sprite[] m_Sprites;
+    public SmokePuff m_SmokePuff;
     private void Awake()
     {
         instance = this;
@@ -19,6 +20,7 @@ public class Wizard : MonoBehaviour
     void Start()
     {
         PlayerController.instance.onElementReturn.AddListener(zap);
+        appear();
     }
 
     // Update is called once per frame
@@ -34,6 +36,7 @@ public class Wizard : MonoBehaviour
 
     public void appear()
     {
+        StartCoroutine(appearAnimation());
     }
 
     IEnumerator zapAnimation()
@@ -53,9 +56,17 @@ public class Wizard : MonoBehaviour
 
     IEnumerator appearAnimation()
     {
-        for (int i = 1; i < 10; i++)
+        AudioManager.instance.explosion(true);
+        for (int i = 1; i < 39; i++)
         {
+            m_SmokePuff.puff();
             yield return new WaitForSeconds(0.05f);
+            if (20 == i)
+            {
+                m_Sprite.sprite = m_Sprites[0];//pop in wizard halfway thru
+                AudioManager.instance.wizardGreeting();//start wizard dialog
+                AudioManager.instance.explosion(false);
+            }
         }
     }
 }

@@ -7,11 +7,12 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
     public AudioSource m_BGM_Manager, m_SFX_KeyPickup, m_SFX_ElementPickup, 
-        m_SFX_ElementReturn, m_SFX_UnlockDoor, m_DLG_Zorton, m_SFX_Spaceship;
+        m_SFX_ElementReturn, m_SFX_UnlockDoor, m_DLG_Zorton, m_SFX_Spaceship, m_SFX_Explosion;
     private float timer = 0;
     public UnityEvent zortonComplete = new UnityEvent();
     private bool BGM_Started = false;
     private bool BGM_Stopped = false;
+    private bool greetingStarted = false;
     void Awake()
     {
         if (null == instance)
@@ -38,7 +39,7 @@ public class AudioManager : MonoBehaviour
             timer = 0;
             StartCoroutine(IncreasePitch());
         }
-        if (!BGM_Started && !m_DLG_Zorton.isPlaying)
+        if (!BGM_Started && greetingStarted && !m_DLG_Zorton.isPlaying)
         {
             BGM_Started = true;
             BGM_Play();
@@ -108,5 +109,19 @@ public class AudioManager : MonoBehaviour
     {
         var v = m_SFX_Spaceship.volume;
         m_SFX_Spaceship.volume = v * 0.95f;
+    }
+
+    public void wizardGreeting()
+    {
+        m_DLG_Zorton.Play();
+        greetingStarted = true;
+    }
+
+    public void explosion(bool play)
+    {
+        if (play)
+            m_SFX_Explosion.Play();
+        else
+            m_SFX_Explosion.Stop();
     }
 }

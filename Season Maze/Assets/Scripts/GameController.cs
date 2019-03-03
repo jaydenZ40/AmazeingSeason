@@ -24,7 +24,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        wizard.SetActive(true);
     }
 
     void ShowSeasonPanel()
