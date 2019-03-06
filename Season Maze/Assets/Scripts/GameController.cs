@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public GameObject Element;
     public Timer timer;
     public GameObject wizard;
+    public GameObject mainCamera;
 
     void Awake()
     {
@@ -57,6 +58,8 @@ public class GameController : MonoBehaviour
         for (int i = 1; i < 100; i++)
         {
             AudioManager.instance.spaceshipVolume();
+            mainCamera.transform.parent = Spaceship.instance.transform;
+            PlayerController.instance.gameObject.SetActive(false);
             Spaceship.instance.Fly();
             yield return new WaitForSeconds(0.05f);
         }

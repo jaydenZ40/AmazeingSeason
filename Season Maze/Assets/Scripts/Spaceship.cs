@@ -14,9 +14,9 @@ public class Spaceship : MonoBehaviour
     {
         if (null == instance)
             instance = this;
-        else
-            Destroy(this.gameObject);
-        DontDestroyOnLoad(this.gameObject);
+        //else
+        //    Destroy(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
     }
     // Start is called before the first frame update
     void Start()
