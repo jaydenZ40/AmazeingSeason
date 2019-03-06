@@ -19,10 +19,12 @@ public class PlayerController : MonoBehaviour
 
     private GameObject curElementBox;
     private bool[] haveKeys = new bool[4] { false, false, false, false };
+    private Animator player_animator;
 
     void Awake()
     {
         instance = this;
+        player_animator = this.GetComponent<Animator>();
         rb = this.transform.GetComponent<Rigidbody2D>();
     }
 
@@ -37,22 +39,40 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        SetAllFalse();
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             rb.transform.Translate(new Vector2(-1 * Time.deltaTime * moveSpeed, 0));
+            player_animator.SetBool("moveLeft", true);
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             rb.transform.Translate(new Vector2(1 * Time.deltaTime * moveSpeed, 0));
+            player_animator.SetBool("moveRight", true);
         }
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             rb.transform.Translate(new Vector2(0, 1 * Time.deltaTime * moveSpeed));
+            player_animator.SetBool("moveUp", true);
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             rb.transform.Translate(new Vector2(0, -1 * Time.deltaTime * moveSpeed));
+            player_animator.SetBool("moveDown", true);
         }
+        if (!Input.anyKey)
+        {
+            player_animator.SetBool("isIdle", true);
+        }
+    }
+
+    void SetAllFalse()
+    {
+        player_animator.SetBool("moveDown", false);
+        player_animator.SetBool("moveUp", false);
+        player_animator.SetBool("moveLeft", false);
+        player_animator.SetBool("moveRight", false);
+        player_animator.SetBool("isIdle", false);
     }
 
     public void DropElement()
