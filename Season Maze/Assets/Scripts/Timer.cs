@@ -36,7 +36,7 @@ public class Timer : MonoBehaviour
         timeText.text = string.Format("Timer: {0:00}", mins + ":" + sec.ToString("00"));
         if (timeLeft <= 0)
         {
-            print("game over");
+            //print("game over");
             SceneManager.LoadScene(3);
             // something happens?
         }

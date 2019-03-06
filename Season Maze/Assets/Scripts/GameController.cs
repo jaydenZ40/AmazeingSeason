@@ -50,6 +50,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator winner()
     {
+        timer.StopTimer();
         AudioManager.instance.BGM_Play(false);
         yield return new WaitForSeconds(0.5f);
         PlayerController.instance.GetComponent<SpriteRenderer>().sprite = null;
@@ -65,7 +66,6 @@ public class GameController : MonoBehaviour
         }
         AudioManager.instance.spaceship(false);
         AudioManager.instance.BGM_Play(false);
-        timer.StopTimer();
         SceneManager.LoadScene(2);
     }
 }
