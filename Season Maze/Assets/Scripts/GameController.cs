@@ -6,20 +6,25 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     private int completedSeason = 0;
-    private bool isFlash = false;
 
     public static GameController instance;
     public GameObject SeasonPanel;
     public GameObject Element;
-    public GameObject MainCamera;
-    public GameObject FlashImage;
+    public Timer timer;
+    public GameObject wizard;
+    public GameObject mainCamera;
 
     void Awake()
     {
         instance = this;
         PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
         ElementController.checkProcess.AddListener(CheckSeason);
+        AudioManager.instance.zortonComplete.AddListener(timer.StartTimer);
         Physics2D.IgnoreLayerCollision(8, 9);
+    }
+
+    private void Start()
+    {
     }
 
     void ShowSeasonPanel()
@@ -34,27 +39,33 @@ public class GameController : MonoBehaviour
         if (Element.transform.GetChild(season).childCount == 0)
         {
             completedSeason++;
-            //print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
+            print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
         }
-        if (completedSeason == 1)
+        if (completedSeason == 4)
         {
-            //print("All seasons completed!"); // edit here: something happens, load another scene
-            MainCamera.transform.parent = null;
-            MainCamera.transform.position = new Vector3(0, 0, -10);
-            Invoke("LoadVictory", 3);
-            for (float i = 0.125f; i < 3; i += 0.125f)
-            {
-                Invoke("Flash", i);
-            }
+            print("All seasons completed!"); // edit here: something happens, load another scene
+            StartCoroutine(winner());
         }
     }
-    void LoadVictory()
+
+    IEnumerator winner()
     {
+        timer.StopTimer();
+        AudioManager.instance.BGM_Play(false);
+        yield return new WaitForSeconds(0.5f);
+        PlayerController.instance.GetComponent<SpriteRenderer>().sprite = null;
+        AudioManager.instance.BGM_Play(false);
+        AudioManager.instance.spaceship(true);
+        for (int i = 1; i < 100; i++)
+        {
+            AudioManager.instance.spaceshipVolume();
+            mainCamera.transform.parent = Spaceship.instance.transform;
+            PlayerController.instance.gameObject.SetActive(false);
+            Spaceship.instance.Fly();
+            yield return new WaitForSeconds(0.05f);
+        }
+        AudioManager.instance.spaceship(false);
+        AudioManager.instance.BGM_Play(false);
         SceneManager.LoadScene(2);
-    }
-    void Flash()
-    {
-        FlashImage.SetActive(!isFlash);
-        isFlash = !isFlash;
     }
 }

@@ -11,15 +11,20 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 2.5f;
     public string elementName = "empty";
     public UnityEvent onWrapGate = new UnityEvent();
+    public UnityEvent onKeyPickup = new UnityEvent();
+    public UnityEvent onElementPickup = new UnityEvent();
+    public UnityEvent onElementReturn = new UnityEvent();
     public StringUnityEvent OperateElement = new StringUnityEvent();
     public GameObject elementHolder, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
 
     private GameObject curElementBox;
     private bool[] haveKeys = new bool[4] { false, false, false, false };
+    private Animator player_animator;
 
     void Awake()
     {
         instance = this;
+        player_animator = this.GetComponent<Animator>();
         rb = this.transform.GetComponent<Rigidbody2D>();
     }
 
@@ -34,22 +39,40 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        SetAllFalse();
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             rb.transform.Translate(new Vector2(-1 * Time.deltaTime * moveSpeed, 0));
+            player_animator.SetBool("moveLeft", true);
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             rb.transform.Translate(new Vector2(1 * Time.deltaTime * moveSpeed, 0));
+            player_animator.SetBool("moveRight", true);
         }
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             rb.transform.Translate(new Vector2(0, 1 * Time.deltaTime * moveSpeed));
+            player_animator.SetBool("moveUp", true);
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             rb.transform.Translate(new Vector2(0, -1 * Time.deltaTime * moveSpeed));
+            player_animator.SetBool("moveDown", true);
         }
+        if (!Input.anyKey)
+        {
+            player_animator.SetBool("isIdle", true);
+        }
+    }
+
+    void SetAllFalse()
+    {
+        player_animator.SetBool("moveDown", false);
+        player_animator.SetBool("moveUp", false);
+        player_animator.SetBool("moveLeft", false);
+        player_animator.SetBool("moveRight", false);
+        player_animator.SetBool("isIdle", false);
     }
 
     public void DropElement()
@@ -69,6 +92,7 @@ public class PlayerController : MonoBehaviour
                 haveKeys[num] = false;
                 keyHolder.transform.GetChild(num).gameObject.SetActive(false);  // should I remove used key?
                 lockHolder.transform.GetChild(num).gameObject.SetActive(false); // remove lock after opening
+                AudioManager.instance.unlockDoor();
             }
         }
     }
@@ -86,6 +110,7 @@ public class PlayerController : MonoBehaviour
             haveKeys[num] = true;
             keyHolder.transform.GetChild(num).gameObject.SetActive(true);   // show icon
             keyParent.transform.GetChild(num).gameObject.SetActive(false);  // hide gameobject
+            onKeyPickup.Invoke();
         }
     }
 
@@ -98,6 +123,7 @@ public class PlayerController : MonoBehaviour
                 elementName = other.transform.name;
                 OperateElement.Invoke(elementName); // pick up the Element, pass event to in ElementController
                 ShowIcon();
+                onElementPickup.Invoke();
             }
         }
     }
@@ -115,9 +141,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void HideIcon()
+    public void HideIcon(bool dropping = false)
     {
         curElementBox.SetActive(false);
+        if (dropping)
+            onElementReturn.Invoke();
     }
 
     public int TranslateLetter(char c)
