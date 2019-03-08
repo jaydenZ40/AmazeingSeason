@@ -45,7 +45,6 @@ public class AudioManager : MonoBehaviour
             BGM_Play();
             zortonComplete.Invoke();
         }
-
     }
 
     public void BGM_Play(bool play = true)

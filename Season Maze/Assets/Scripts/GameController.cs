@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
     public GameObject wizard;
     public GameObject mainCamera;
     public GameObject restoredElements;
+    public GameObject tutotialCompletePanel;
 
     void Start()
     {
@@ -40,9 +41,9 @@ public class GameController : MonoBehaviour
         }
         // put other three element into the restoredElements gameobject
         // so that load next scene when finish one season in tutorial
-        if (restoredElements.transform.childCount == 4) 
+        if (completedSeason != 4 && restoredElements.transform.childCount == 4) 
         {
-            SceneManager.LoadScene(1);
+            tutotialCompletePanel.SetActive(true);
         }
 
         if (completedSeason == 4 && restoredElements.transform.childCount == 4)
