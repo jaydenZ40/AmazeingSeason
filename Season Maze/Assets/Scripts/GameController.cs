@@ -13,18 +13,15 @@ public class GameController : MonoBehaviour
     public Timer timer;
     public GameObject wizard;
     public GameObject mainCamera;
+    public GameObject restoredElements;
 
-    void Awake()
+    void Start()
     {
         instance = this;
         PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
         ElementController.checkProcess.AddListener(CheckSeason);
         AudioManager.instance.zortonComplete.AddListener(timer.StartTimer);
         Physics2D.IgnoreLayerCollision(8, 9);
-    }
-
-    private void Start()
-    {
     }
 
     void ShowSeasonPanel()
@@ -39,11 +36,18 @@ public class GameController : MonoBehaviour
         if (Element.transform.GetChild(season).childCount == 0)
         {
             completedSeason++;
-            print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
+            //print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
         }
-        if (completedSeason == 4)
+        // put other three element into the restoredElements gameobject
+        // so that load next scene when finish one season in tutorial
+        if (restoredElements.transform.childCount == 4) 
         {
-            print("All seasons completed!"); // edit here: something happens, load another scene
+            SceneManager.LoadScene(1);
+        }
+
+        if (completedSeason == 4 && restoredElements.transform.childCount == 4)
+        {
+            //print("All seasons completed!"); // edit here: something happens, load another scene
             StartCoroutine(winner());
         }
     }
