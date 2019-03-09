@@ -65,6 +65,7 @@ public class GameController : MonoBehaviour
         {
             AudioManager.instance.spaceshipVolume();
             mainCamera.transform.parent = Spaceship.instance.transform;
+            mainCamera.transform.position = Spaceship.instance.transform.position + new Vector3(0, 0, -10);
             PlayerController.instance.gameObject.SetActive(false);
             Spaceship.instance.Fly();
             yield return new WaitForSeconds(0.05f);
