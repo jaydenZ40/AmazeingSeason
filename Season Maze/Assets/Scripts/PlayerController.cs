@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent onElementPickup = new UnityEvent();
     public UnityEvent onElementReturn = new UnityEvent();
     public StringUnityEvent OperateElement = new StringUnityEvent();
-    public GameObject elementHolder, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
+    private GameObject elementHolder, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
 
     private GameObject curElementBox;
     private bool[] haveKeys = new bool[4] { false, false, false, false };
@@ -23,10 +23,32 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
-        player_animator = this.GetComponent<Animator>();
-        rb = this.transform.GetComponent<Rigidbody2D>();
+        if (null == instance)
+        {
+            instance = this;
+            player_animator = this.GetComponent<Animator>();
+            rb = this.transform.GetComponent<Rigidbody2D>();
+        }
+        else
+            Destroy(this.gameObject);
+        DontDestroyOnLoad(this.gameObject);
     }
+
+    private void Start()
+    {
+        //Restart();
+    }
+
+    public void Restart()
+    {
+        keyHolder = GameObject.Find("keyHolder");
+        keyParent = GameObject.Find("Keys");
+        elementHolder = GameObject.Find("elementHolder");
+        lockHolder = GameObject.Find("Locks");
+        curElementBox = null;
+        instance.transform.position = new Vector3(-1.25f, -1.25f);
+    }
+
 
     void FixedUpdate()
     {
@@ -143,7 +165,8 @@ public class PlayerController : MonoBehaviour
 
     public void HideIcon(bool dropping = false)
     {
-        curElementBox.SetActive(false);
+        if(null != curElementBox)
+            curElementBox.SetActive(false);
         if (dropping)
             onElementReturn.Invoke();
     }

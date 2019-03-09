@@ -52,8 +52,7 @@ public class ButtonsController : MonoBehaviour
 
     public void OnRestart()
     {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(1);
+        GameController.instance.Restart();
     }
 
     public void OnMainMenu()
