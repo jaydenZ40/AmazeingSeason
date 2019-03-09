@@ -14,9 +14,9 @@ public class Spaceship : MonoBehaviour
     {
         if (null == instance)
             instance = this;
-        //else
-        //    Destroy(this.gameObject);
-        //DontDestroyOnLoad(this.gameObject);
+        else
+            Destroy(this.gameObject);
+        DontDestroyOnLoad(this.gameObject);
     }
     // Start is called before the first frame update
     void Start()
@@ -42,5 +42,13 @@ public class Spaceship : MonoBehaviour
     {
         var vec = new Vector3(0.0f, 0.25f, 0);
         this.transform.Translate(vec);
+    }
+
+    public void Restart()
+    {
+        instance.gameObject.SetActive(true);
+        instance.transform.position = new Vector3(0.0f, 0.25f);
+        damageLevel = 4;
+        m_Sprite.sprite = m_Sprites[damageLevel];
     }
 }

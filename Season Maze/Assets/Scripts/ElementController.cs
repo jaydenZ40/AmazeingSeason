@@ -26,7 +26,7 @@ public class ElementController : MonoBehaviour
             if (this.name == str) // avoid operating all listeners by matching object's name
             {
                 tempParent = this.transform.parent.gameObject;
-                this.transform.position = PlayerController.instance.rb.transform.position + new Vector3(0, 0.5f, 0);  // hold the Element above the player (no collision with elements)
+                this.transform.position = PlayerController.instance.rb.transform.position + new Vector3(0, 0.5f, 0);  // hold the Element above the player?
                 this.transform.SetParent(PlayerController.instance.transform);
                 isFollowingPlayer = !isFollowingPlayer;
             }
