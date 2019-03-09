@@ -13,18 +13,16 @@ public class GameController : MonoBehaviour
     public Timer timer;
     public GameObject wizard;
     public GameObject mainCamera;
+    public GameObject restoredElements;
+    public GameObject tutotialCompletePanel;
 
-    void Awake()
+    void Start()
     {
         instance = this;
         PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
         ElementController.checkProcess.AddListener(CheckSeason);
         AudioManager.instance.zortonComplete.AddListener(timer.StartTimer);
         Physics2D.IgnoreLayerCollision(8, 9);
-    }
-
-    private void Start()
-    {
     }
 
     void ShowSeasonPanel()
@@ -39,11 +37,18 @@ public class GameController : MonoBehaviour
         if (Element.transform.GetChild(season).childCount == 0)
         {
             completedSeason++;
-            print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
+            //print("Season " + (season + 1) + " completed!"); // edit here: something happens for this season.
         }
-        if (completedSeason == 4)
+        // put other three element into the restoredElements gameobject
+        // so that load next scene when finish one season in tutorial
+        if (completedSeason != 4 && restoredElements.transform.childCount == 4) 
         {
-            print("All seasons completed!"); // edit here: something happens, load another scene
+            tutotialCompletePanel.SetActive(true);
+        }
+
+        if (completedSeason == 4 && restoredElements.transform.childCount == 4)
+        {
+            //print("All seasons completed!"); // edit here: something happens, load another scene
             StartCoroutine(winner());
         }
     }
@@ -60,6 +65,7 @@ public class GameController : MonoBehaviour
         {
             AudioManager.instance.spaceshipVolume();
             mainCamera.transform.parent = Spaceship.instance.transform;
+            mainCamera.transform.position = Spaceship.instance.transform.position + new Vector3(0, 0, -10);
             PlayerController.instance.gameObject.SetActive(false);
             Spaceship.instance.Fly();
             yield return new WaitForSeconds(0.05f);

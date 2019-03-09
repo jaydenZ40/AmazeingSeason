@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent onElementPickup = new UnityEvent();
     public UnityEvent onElementReturn = new UnityEvent();
     public StringUnityEvent OperateElement = new StringUnityEvent();
-    public GameObject elementHolder, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
+    public GameObject elementIcon, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
 
     private GameObject curElementBox;
     private bool[] haveKeys = new bool[4] { false, false, false, false };
@@ -132,10 +132,10 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            if (elementHolder.transform.GetChild(i).name[1] == elementName[1])
+            if (elementIcon.transform.GetChild(i).name[1] == elementName[1])
             {
-                curElementBox = elementHolder.transform.GetChild(i).gameObject;
-                elementHolder.transform.GetChild(i).gameObject.SetActive(true);
+                curElementBox = elementIcon.transform.GetChild(i).gameObject;
+                elementIcon.transform.GetChild(i).gameObject.SetActive(true);
                 break;
             }
         }
