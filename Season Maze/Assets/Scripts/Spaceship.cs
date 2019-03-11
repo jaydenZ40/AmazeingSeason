@@ -5,6 +5,7 @@ using UnityEngine;
 public class Spaceship : MonoBehaviour
 {
     public static Spaceship instance { get; private set; }
+    public GameObject mainCamera;
     private int damageLevel = 4;
     [SerializeField]
     private SpriteRenderer m_Sprite;
@@ -33,9 +34,23 @@ public class Spaceship : MonoBehaviour
 
     void Repair()
     {
+        mainCamera.transform.parent = null;
+        mainCamera.transform.position = new Vector3(0, 0, -10);
+        Invoke("DelayRepair", 0.5f);
+        Invoke("CameraBack", 1f);
+    }
+
+    void DelayRepair()
+    {
         if (0 < damageLevel)
             damageLevel--;
         m_Sprite.sprite = m_Sprites[damageLevel];
+    }
+    void CameraBack()
+    {
+        GameObject player = GameObject.Find("Player");
+        mainCamera.transform.position = player.transform.position - new Vector3(0, 0, 10);
+        mainCamera.transform.parent = player.transform;
     }
 
     public void Fly()

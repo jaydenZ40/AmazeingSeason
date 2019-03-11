@@ -7,25 +7,25 @@ public class ButtonsController : MonoBehaviour
 {
     public void OnSpring()
     {
-        PlayerController.instance.rb.transform.position = new Vector3(-1.5f, 2.5f, 0);
+        PlayerController.instance.rb.transform.position = new Vector3(-12.5f, 10f, 0);
         HideSeasonPanel();
     }
 
     public void OnSummer()
     {
-        PlayerController.instance.rb.transform.position = new Vector3(2.5f, 2.5f, 0);
+        PlayerController.instance.rb.transform.position = new Vector3(14.5f, 11.5f, 0);
         HideSeasonPanel();
     }
 
     public void OnFall()
     {
-        PlayerController.instance.rb.transform.position = new Vector3(-1.5f, -1.5f, 0);
+        PlayerController.instance.rb.transform.position = new Vector3(-12.5f, -9.5f, 0);
         HideSeasonPanel();
     }
 
     public void OnWinter()
     {
-        PlayerController.instance.rb.transform.position = new Vector3(2.5f, -1.5f, 0);
+        PlayerController.instance.rb.transform.position = new Vector3(12.5f, -7.5f, 0);
         HideSeasonPanel();
     }
 
@@ -58,5 +58,9 @@ public class ButtonsController : MonoBehaviour
     public void OnMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+    public void OnTutorial()
+    {
+        SceneManager.LoadScene(4);
     }
 }
