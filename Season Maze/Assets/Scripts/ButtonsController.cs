@@ -63,4 +63,16 @@ public class ButtonsController : MonoBehaviour
     {
         SceneManager.LoadScene(4);
     }
+    public void OnNextScene1()
+    {
+        SceneManager.LoadScene(5);
+    }
+    public void OnNextScene2()
+    {
+        SceneManager.LoadScene(6);
+    }
+    public void OnNextScene3()
+    {
+        SceneManager.LoadScene(7);
+    }
 }
