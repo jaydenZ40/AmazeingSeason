@@ -47,6 +47,8 @@ public class Wizard : MonoBehaviour
 
     public void zap()
     {
+        if (GameController.instance.isTutorial)
+            return;
         StartCoroutine(zapAnimation());
     }
 

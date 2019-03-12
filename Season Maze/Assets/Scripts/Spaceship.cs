@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spaceship : MonoBehaviour
 {
     public static Spaceship instance { get; private set; }
-    public GameObject mainCamera;
+    public Component mainCamera;
     private int damageLevel = 4;
     [SerializeField]
     private SpriteRenderer m_Sprite;
@@ -34,6 +34,8 @@ public class Spaceship : MonoBehaviour
 
     void Repair()
     {
+        if (GameController.instance.isTutorial)
+            return;
         mainCamera.transform.parent = null;
         mainCamera.transform.position = new Vector3(0, 0, -10);
         Invoke("DelayRepair", 0.5f);

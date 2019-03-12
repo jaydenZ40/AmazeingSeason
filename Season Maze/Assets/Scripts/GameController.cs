@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     public GameObject wizard;
     public GameObject mainCamera;
     private Timer timer;
+    public bool isTutorial { get; private set; }
     private bool restarted = false;
     public bool Restarted { get { return restarted; } }
 
@@ -28,10 +29,38 @@ public class GameController : MonoBehaviour
             ElementController.checkProcess.AddListener(CheckSeason);
             AudioManager.instance.zortonComplete.AddListener(StartTimer);
             Physics2D.IgnoreLayerCollision(8, 9);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
             Destroy(this.gameObject);
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if ("TutorialLevel" == scene.name)
+        {
+            PlayerController.instance.Restart();
+            isTutorial = true;
+            AudioManager.instance.BGM_Play();
+            PlayerController.instance.HideSprite(false);
+        }
+        else
+            isTutorial = false;
+        if ("Level 1" == scene.name)
+        {
+            Spaceship.instance.gameObject.SetActive(true);
+            PlayerController.instance.HideSprite(false);
+            Wizard.instance.gameObject.SetActive(true);
+            Spaceship.instance.mainCamera = PlayerController.GetCamera();
+        }
+        else
+        {
+            PlayerController.instance.HideSprite(true);
+            Wizard.instance.gameObject.SetActive(false);
+            Spaceship.instance.gameObject.SetActive(false);
+        }
+
     }
 
     internal void SetElememts(Elements elements)
@@ -97,6 +126,11 @@ public class GameController : MonoBehaviour
         {
             print("All seasons completed!"); // edit here: something happens, load another scene
             StartCoroutine(winner());
+        }
+        if (isTutorial && completedSeason == 1)
+        {
+            AudioManager.instance.BGM_Play(false);
+            SceneManager.LoadScene("StoryScene1");
         }
     }
 

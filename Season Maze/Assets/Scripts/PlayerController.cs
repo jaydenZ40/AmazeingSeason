@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private GameObject curElementBox;
     private bool[] haveKeys = new bool[4] { false, false, false, false };
     private Animator player_animator;
+    private SpriteRenderer sprite;
+    private Sprite lastSprite;
 
     void Awake()
     {
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
             instance = this;
             player_animator = this.GetComponent<Animator>();
             rb = this.transform.GetComponent<Rigidbody2D>();
+            sprite = transform.GetComponent<SpriteRenderer>();
         }
         else
             Destroy(this.gameObject);
@@ -58,6 +62,22 @@ public class PlayerController : MonoBehaviour
         {
             DropElement();
         }
+    }
+
+    internal void HideSprite(bool hide)
+    {
+        if (hide)
+        {
+            lastSprite = sprite.sprite;
+            sprite.sprite = null;
+        }
+        else
+            sprite.sprite = lastSprite;
+    }
+
+    internal static Component GetCamera()
+    {
+        return instance.transform.GetComponentInChildren<Camera>();
     }
 
     void Move()
