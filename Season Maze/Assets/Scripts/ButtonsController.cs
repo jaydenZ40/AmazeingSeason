@@ -37,7 +37,7 @@ public class ButtonsController : MonoBehaviour
 
     public void OnPlay()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("ChooseModes");
     }
 
     public void OnQuit()
@@ -57,22 +57,41 @@ public class ButtonsController : MonoBehaviour
 
     public void OnMainMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("Start");
     }
     public void OnTutorial()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene("TutorialLevel");
     }
     public void OnNextScene1()
     {
-        SceneManager.LoadScene(5);
+        SceneManager.LoadScene("StoryScene2");
     }
     public void OnNextScene2()
     {
-        SceneManager.LoadScene(6);
+        SceneManager.LoadScene("StoryScene3");
     }
     public void OnNextScene3()
     {
-        SceneManager.LoadScene(7);
+        SceneManager.LoadScene("Level 1");
+    }
+    public void OnHard()
+    {
+        SceneManager.LoadScene("StoryScene1");
+        NoDestroyController.instance.isHard = true;
+        NoDestroyController.instance.isCrazy = false;
+    }
+
+    public void OnEasy()
+    {
+        SceneManager.LoadScene("StoryScene1");
+        NoDestroyController.instance.isHard = false;
+        NoDestroyController.instance.isCrazy = false;
+    }
+    public void OnCrazy()
+    {
+        SceneManager.LoadScene("StoryScene1");
+        NoDestroyController.instance.isHard = false;
+        NoDestroyController.instance.isCrazy = true;
     }
 }

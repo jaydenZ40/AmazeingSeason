@@ -644,7 +644,7 @@ PrefabInstance:
         type: 3}
       propertyPath: mainCamera
       value: 
-      objectReference: {fileID: 1340508192}
+      objectReference: {fileID: 1340508195}
     - target: {fileID: 921311929478722188, guid: 20e669a97a93e244c8f312dbff55fc9b,
         type: 3}
       propertyPath: Element
@@ -37141,6 +37141,11 @@ PrefabInstance:
       propertyPath: elementIcon
       value: 
       objectReference: {fileID: 648942090139108805}
+    - target: {fileID: 4035851497866149285, guid: 8be3dadc399a01949851521d6301c02d,
+        type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1340508195}
     - target: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
         type: 3}
       propertyPath: orthographic size
@@ -80625,9 +80630,9 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1326232342}
   m_CullTransparentMesh: 0
---- !u!1 &1340508192 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4035851497966456612, guid: 8be3dadc399a01949851521d6301c02d,
+--- !u!20 &1340508195 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
     type: 3}
   m_PrefabInstance: {fileID: 699795694}
   m_PrefabAsset: {fileID: 0}
@@ -86525,7 +86530,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 8fbb779ecfb4fe146b1f92817a80e1e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

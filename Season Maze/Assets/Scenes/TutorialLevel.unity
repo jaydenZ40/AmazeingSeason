@@ -660,6 +660,11 @@ PrefabInstance:
       propertyPath: tutotialCompletePanel
       value: 
       objectReference: {fileID: 1509334099}
+    - target: {fileID: 921311929478722188, guid: 20e669a97a93e244c8f312dbff55fc9b,
+        type: 3}
+      propertyPath: SeasonCompletePanel
+      value: 
+      objectReference: {fileID: 1509334099}
     - target: {fileID: 921311929478722191, guid: 20e669a97a93e244c8f312dbff55fc9b,
         type: 3}
       propertyPath: pausePanel
@@ -11591,6 +11596,11 @@ PrefabInstance:
       propertyPath: elementIcon
       value: 
       objectReference: {fileID: 648942090139108805}
+    - target: {fileID: 4035851497866149285, guid: 8be3dadc399a01949851521d6301c02d,
+        type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 699795695}
     - target: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
         type: 3}
       propertyPath: orthographic size
@@ -11638,6 +11648,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8be3dadc399a01949851521d6301c02d, type: 3}
+--- !u!20 &699795695 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
+    type: 3}
+  m_PrefabInstance: {fileID: 699795694}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &771899118
 GameObject:
   m_ObjectHideFlags: 0
