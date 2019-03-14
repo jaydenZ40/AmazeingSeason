@@ -25,8 +25,9 @@ public class Wizard : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
     // Start is called before the first frame update
-    void Start()
+    public void Level_1_Start()
     {
+        Hide(false);
         //Play wizard entrance animation
         if (!appeared)
         {
@@ -81,7 +82,8 @@ public class Wizard : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
             if (20 == i)
             {
-                Hide(false);//pop in wizard halfway thru
+                Debug.Log("Wizard appears");
+                m_Sprite.sprite = m_Sprites[0];//pop in wizard halfway thru
                 AudioManager.instance.wizardGreeting();//start wizard dialog
                 AudioManager.instance.explosion(false);
             }
@@ -90,9 +92,17 @@ public class Wizard : MonoBehaviour
 
     internal void Hide(bool hide)
     {
-        if(hide)
-            m_Sprite.sprite = null;
+        var pos = transform.position;
+        if (hide)
+        {
+            pos.z = -20;
+            this.transform.position = pos;
+        }
         else
-            m_Sprite.sprite = m_Sprites[0];
+        {
+            pos.z = 0;
+            Debug.Log(pos.ToString());
+            this.transform.position = pos;
+        }
     }
 }

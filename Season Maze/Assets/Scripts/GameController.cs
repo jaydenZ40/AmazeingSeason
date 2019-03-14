@@ -22,20 +22,35 @@ public class GameController : MonoBehaviour
     private bool restarted = false;
     public bool Restarted { get { return restarted; } }
 
+    public ChallengeLevels Challenge { get; set; }
+
+    public enum ChallengeLevels
+    {
+        Crazy = 2,
+        Hard = 4,
+        Easy = 6
+    }
+
     void Awake()
     {
         if (null == instance)
         {
             instance = this;
-            PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
-            ElementController.checkProcess.AddListener(CheckSeason);
-            AudioManager.instance.zortonComplete.AddListener(StartTimer);
-            Physics2D.IgnoreLayerCollision(8, 9);
+            Challenge = ChallengeLevels.Easy;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
             Destroy(this.gameObject);
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Start()
+    {
+        PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
+        ElementController.checkProcess.AddListener(CheckSeason);
+        AudioManager.instance.zortonComplete.AddListener(StartTimer);
+        Physics2D.IgnoreLayerCollision(8, 9);
+        //PlayerController.instance.Hide(true);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -45,22 +60,30 @@ public class GameController : MonoBehaviour
             PlayerController.instance.Restart();
             isTutorial = true;
             AudioManager.instance.BGM_Play();
-            PlayerController.instance.HideSprite(false);
+            PlayerController.instance.Hide(false);
         }
         else
             isTutorial = false;
         if ("Level 1" == scene.name)
         {
-            Spaceship.instance.gameObject.SetActive(true);
-            PlayerController.instance.HideSprite(false);
-            Wizard.instance.gameObject.SetActive(true);
+            AudioManager.instance.spaceship(false);
+            Spaceship.instance.Level_1_Start();
+            Wizard.instance.Level_1_Start();
+            PlayerController.instance.Hide(false);
             Spaceship.instance.mainCamera = PlayerController.GetCamera();
         }
         else
         {
-            PlayerController.instance.HideSprite(true);
-            Wizard.instance.gameObject.SetActive(false);
-            Spaceship.instance.gameObject.SetActive(false);
+            if (!isTutorial)
+                PlayerController.instance.Hide(true);
+            if(null != Wizard.instance)
+                Wizard.instance.Hide(true);
+            if (null != Spaceship.instance)
+                Spaceship.instance.Hide(true);
+            if ("StoryScene1" == scene.name)
+                AudioManager.instance.spaceship(true, 0.125f);
+            if ("StoryScene3" == scene.name)
+                StartCoroutine(CrashShip());
         }
 
     }
@@ -110,10 +133,11 @@ public class GameController : MonoBehaviour
         //PlayerController.instance.Restart();
         restarted = true;
         completedSeason = 0;
-        Wizard.instance.gameObject.SetActive(true);
+        //Wizard.instance.gameObject.SetActive(true);
         Spaceship.instance.Restart();
         StartTimer();
         AudioManager.instance.BGM_Play(true);
+        SeasonPanel = GameObject.Find("SeasonPanel");
     }
 
     void CheckSeason(char c)
@@ -136,6 +160,8 @@ public class GameController : MonoBehaviour
 
             /********************************************************************************************
             // Bug here! when finish tutorial and then back to main menu, the player remains on the screen
+            // Fixed player, wizard and spaceship moved above camera on all scenes except level 1 and
+            // player not moved on tutorial level.
             *********************************************************************************************/
         }
     }
@@ -157,14 +183,15 @@ public class GameController : MonoBehaviour
         }
         PlayerController.instance.GetComponent<BoxCollider2D>().enabled = true;
         //Hide the player to simulate entering the spaceship
-        PlayerController.instance.GetComponent<SpriteRenderer>().sprite = null;
+        PlayerController.instance.Hide(true);
         AudioManager.instance.BGM_Play(false);
         AudioManager.instance.spaceship(true);
+        mainCamera = PlayerController.instance.camera;
         for (int i = 1; i < 100; i++)
         {
             AudioManager.instance.spaceshipVolume();
             mainCamera.transform.parent = Spaceship.instance.transform;
-            PlayerController.instance.gameObject.SetActive(false);
+            //PlayerController.instance.gameObject.SetActive(false);
             Spaceship.instance.Fly();
             yield return new WaitForSeconds(0.05f);
         }
@@ -173,5 +200,16 @@ public class GameController : MonoBehaviour
         AudioManager.instance.Winner();
         Wizard.instance.gameObject.SetActive(false);
         SceneManager.LoadScene(2);
+    }
+
+    IEnumerator CrashShip()
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            AudioManager.instance.spaceshipVolume();
+            yield return new WaitForSeconds(0.01f);
+        }
+        AudioManager.instance.spaceship(false);
+        AudioManager.instance.crash();
     }
 }

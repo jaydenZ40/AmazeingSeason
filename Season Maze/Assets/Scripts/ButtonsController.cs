@@ -78,20 +78,23 @@ public class ButtonsController : MonoBehaviour
     public void OnHard()
     {
         SceneManager.LoadScene("StoryScene1");
-        NoDestroyController.instance.isHard = true;
-        NoDestroyController.instance.isCrazy = false;
+        GameController.instance.Challenge = GameController.ChallengeLevels.Hard;
+//        NoDestroyController.instance.isHard = true;
+//        NoDestroyController.instance.isCrazy = false;
     }
 
     public void OnEasy()
     {
         SceneManager.LoadScene("StoryScene1");
-        NoDestroyController.instance.isHard = false;
-        NoDestroyController.instance.isCrazy = false;
+        GameController.instance.Challenge = GameController.ChallengeLevels.Easy;
+        //        NoDestroyController.instance.isHard = false;
+        //        NoDestroyController.instance.isCrazy = false;
     }
     public void OnCrazy()
     {
         SceneManager.LoadScene("StoryScene1");
-        NoDestroyController.instance.isHard = false;
-        NoDestroyController.instance.isCrazy = true;
+        GameController.instance.Challenge = GameController.ChallengeLevels.Crazy;
+        //        NoDestroyController.instance.isHard = false;
+        //        NoDestroyController.instance.isCrazy = true;
     }
 }

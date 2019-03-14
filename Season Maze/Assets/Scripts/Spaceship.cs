@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,8 @@ public class Spaceship : MonoBehaviour
 {
     public static Spaceship instance { get; private set; }
     public Component mainCamera;
-    private int damageLevel = 4;
+    private static int maxDamage = 4;
+    private int damageLevel = maxDamage;
     [SerializeField]
     private SpriteRenderer m_Sprite;
     [SerializeField]
@@ -59,6 +61,29 @@ public class Spaceship : MonoBehaviour
     {
         var vec = new Vector3(0.0f, 0.25f, 0);
         this.transform.Translate(vec);
+    }
+
+    internal void Level_1_Start()
+    {
+        m_Sprite = this.gameObject.GetComponent<SpriteRenderer>();
+        transform.position = new Vector3(0.0f, 0.25f, 0);
+        damageLevel = maxDamage;
+        m_Sprite.sprite = m_Sprites[damageLevel];
+    }
+
+    internal void Hide(bool hide)
+    {
+        var pos = transform.position;
+        if (hide)
+        {
+            pos.z = -20;
+            this.transform.position = pos;
+        }
+        else
+        {
+            pos.z = 0;
+            this.transform.position = pos;
+        }
     }
 
     public void Restart()

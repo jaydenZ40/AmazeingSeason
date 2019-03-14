@@ -46,13 +46,13 @@ public class PlayerController : MonoBehaviour
 
     public void Restart()
     {
-        PlayerController.instance.gameObject.SetActive(true);
+        //PlayerController.instance.gameObject.SetActive(true);
         keyHolder = GameObject.Find("keyHolder");
         keyParent = GameObject.Find("Keys");
         elementHolder = GameObject.Find("elementIcon");
         lockHolder = GameObject.Find("LockHolders");
         curElementBox = null;
-        instance.transform.position = new Vector3(-2.0f, -2.0f);
+        instance.transform.position = new Vector3(-2.0f, -2.0f, 0);
     }
 
 
@@ -63,31 +63,43 @@ public class PlayerController : MonoBehaviour
         {
             DropElement();
         }
-
-        if (NoDestroyController.instance.isCrazy)
-        {
-            PlayerController.instance.camera.orthographicSize = 2;
-        }
-        else if (NoDestroyController.instance.isHard)
-        {
-            PlayerController.instance.camera.orthographicSize = 4;
-        }
-        else
-        {
-            PlayerController.instance.camera.orthographicSize = 6;
-        }
+        if (null == camera)
+            return;
+        PlayerController.instance.camera.orthographicSize = (float)GameController.instance.Challenge;
+        //if (NoDestroyController.instance.isCrazy)
+        //{
+        //    PlayerController.instance.camera.orthographicSize = 2;
+        //}
+        //else if (NoDestroyController.instance.isHard)
+        //{
+        //    PlayerController.instance.camera.orthographicSize = 4;
+        //}
+        //else
+        //{
+        //    PlayerController.instance.camera.orthographicSize = 6;
+        //}
     }
 
-    internal void HideSprite(bool hide)
+    internal void Hide(bool hide)
     {
+        Debug.Log("Hide Player? " + hide);
+        if (null == camera)
+            camera = instance.transform.GetComponentInChildren<Camera>();
+        var pos = transform.position;
         if (hide)
         {
-            if (null != sprite.sprite)
-                lastSprite = sprite.sprite;
-            sprite.sprite = null;
+            pos.z = -20;
+            this.transform.position = pos;
+            pos.z = -10;
+            instance.camera.transform.position = pos;
         }
         else
-            sprite.sprite = lastSprite;
+        {
+            pos.z = 0;
+            this.transform.position = pos;
+            pos.z = -10;
+            instance.camera.transform.position = pos;
+        }
     }
 
     internal static Component GetCamera()
