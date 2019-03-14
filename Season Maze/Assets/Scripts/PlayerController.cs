@@ -68,7 +68,8 @@ public class PlayerController : MonoBehaviour
     {
         if (hide)
         {
-            lastSprite = sprite.sprite;
+            if (null != sprite.sprite)
+                lastSprite = sprite.sprite;
             sprite.sprite = null;
         }
         else
