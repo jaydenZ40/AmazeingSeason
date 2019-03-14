@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
     public Rigidbody2D rb;
+    public Camera camera;
     public float moveSpeed = 2.5f;
     public string elementName = "empty";
     public UnityEvent onWrapGate = new UnityEvent();
@@ -61,6 +62,19 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && elementName != "empty")
         {
             DropElement();
+        }
+
+        if (NoDestroyController.instance.isCrazy)
+        {
+            PlayerController.instance.camera.orthographicSize = 2;
+        }
+        else if (NoDestroyController.instance.isHard)
+        {
+            PlayerController.instance.camera.orthographicSize = 4;
+        }
+        else
+        {
+            PlayerController.instance.camera.orthographicSize = 6;
         }
     }
 

@@ -14,7 +14,9 @@ public class GameController : MonoBehaviour
 
     private Elements Element;
     public GameObject wizard;
-    public GameObject mainCamera;
+    public Camera mainCamera;
+    public GameObject SeasonCompletePanel;
+
     private Timer timer;
     public bool isTutorial { get; private set; }
     private bool restarted = false;
@@ -82,7 +84,7 @@ public class GameController : MonoBehaviour
        Timer.instance.StartTimer();
     }
 
-    private void Start()
+    private void Update()
     {
     }
 
@@ -130,7 +132,11 @@ public class GameController : MonoBehaviour
         if (isTutorial && completedSeason == 1)
         {
             AudioManager.instance.BGM_Play(false);
-            SceneManager.LoadScene("StoryScene1");
+            SeasonCompletePanel.SetActive(true);
+
+            /********************************************************************************************
+            // Bug here! when finish tutorial and then back to main menu, the player remains on the screen
+            *********************************************************************************************/
         }
     }
 
