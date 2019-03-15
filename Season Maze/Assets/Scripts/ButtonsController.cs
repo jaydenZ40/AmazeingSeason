@@ -31,7 +31,7 @@ public class ButtonsController : MonoBehaviour
 
     void HideSeasonPanel()
     {
-        GameController.instance.SeasonPanel.SetActive(false);
+        GameController.instance.SeasonPanelActive(false);
         Time.timeScale = 1;
     }
 

@@ -61,20 +61,20 @@ public class AudioManager : MonoBehaviour
         SFX_GameOver.Play();
     }
 
-    public void BGM_Play(bool play = true)
+    public void BGM_Play(bool play = true, bool runTimer = true)
     {
         BGM_Stopped = !play;
         if (play)
         {
             m_BGM_Manager.Play();
-            timerRunning = true;
+            timerRunning = runTimer;
             timer = 0;
         }
         else
         {
             m_BGM_Manager.Stop();
             StopAllCoroutines();
-            timerRunning = false;
+            timerRunning = runTimer;
             timer = 0;
         }
 

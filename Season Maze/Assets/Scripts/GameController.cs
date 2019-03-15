@@ -10,11 +10,11 @@ public class GameController : MonoBehaviour
 
     public static GameController instance;
 
-    public GameObject SeasonPanel;
+    private GameObject SeasonPanel;
 
     private GameObject Element;
-    public Camera mainCamera;
-    public GameObject SeasonCompletePanel;
+    private Camera mainCamera;
+    private GameObject SeasonCompletePanel;
 
     private Timer timer;
     public bool isTutorial { get; private set; }
@@ -43,6 +43,18 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
+    internal void SeasonPanelActive(bool active)
+    {
+        SeasonPanel = GameObject.Find("Canvas").transform.Find("SeasonPanel").gameObject;
+        SeasonPanel.SetActive(active);
+    }
+
+    internal void SeasonCompletePanelActive(bool active)
+    {
+        SeasonCompletePanel = GameObject.Find("Canvas").transform.Find("TutorialCompleted").gameObject;
+        SeasonCompletePanel.SetActive(active);
+    }
+
     private void Start()
     {
         AudioManager.instance.zortonComplete.AddListener(StartTimer);
@@ -64,18 +76,17 @@ public class GameController : MonoBehaviour
         else
             isTutorial = false;
         if ("Level 1" == scene.name)
-        {
             SetupLevelOne();
-        }
-        else
+        if ("StoryScene1" == scene.name)
         {
-            if (!isTutorial)
-            if ("StoryScene1" == scene.name)
-                AudioManager.instance.spaceship(true, 0.125f);
-            if ("StoryScene3" == scene.name)
-                StartCoroutine(CrashShip());
+            AudioManager.instance.BGM_Play(false, false);
+            AudioManager.instance.spaceship(true, 0.125f);
         }
-
+        if ("StoryScene3" == scene.name)
+            StartCoroutine(CrashShip());
+        if ("Start" == scene.name)
+            AudioManager.instance.BGM_Play(true, false);
+ 
     }
 
     private void SetupLevelOne()
@@ -104,7 +115,7 @@ public class GameController : MonoBehaviour
 
     void ShowSeasonPanel()
     {
-        SeasonPanel.SetActive(true);
+        SeasonPanelActive(true);
         Time.timeScale = 0;
     }
 
@@ -128,7 +139,6 @@ public class GameController : MonoBehaviour
         Spaceship.instance.Restart();
         StartTimer();
         AudioManager.instance.BGM_Play(true);
-        SeasonPanel = GameObject.Find("SeasonPanel");
     }
 
     void CheckSeason(char c)
@@ -147,7 +157,7 @@ public class GameController : MonoBehaviour
         if (isTutorial && completedSeason == 1)
         {
             AudioManager.instance.BGM_Play(false);
-            SeasonCompletePanel.SetActive(true);
+            SeasonCompletePanelActive(true);
 
             /********************************************************************************************
             // Bug here! when finish tutorial and then back to main menu, the player remains on the screen
