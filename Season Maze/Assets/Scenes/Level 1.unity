@@ -854,12 +854,12 @@ PrefabInstance:
       propertyPath: SFX_GameOver
       value: 
       objectReference: {fileID: 519063395}
-    - target: {fileID: 5302251211496486412, guid: a2ac78554eddade4fbebde76f10f398e,
+    - target: {fileID: 1035829363134104850, guid: a2ac78554eddade4fbebde76f10f398e,
         type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1035829363134104850, guid: a2ac78554eddade4fbebde76f10f398e,
+    - target: {fileID: 5302251211496486412, guid: a2ac78554eddade4fbebde76f10f398e,
         type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
@@ -37146,16 +37146,6 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1340508195}
-    - target: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
-        type: 3}
-      propertyPath: orthographic size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
-        type: 3}
-      propertyPath: m_ClearFlags
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4035851497866148953, guid: 8be3dadc399a01949851521d6301c02d,
         type: 3}
       propertyPath: m_Offset.y
@@ -37165,6 +37155,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.y
       value: 0.6664562
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
+        type: 3}
+      propertyPath: orthographic size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4035851497966456615, guid: 8be3dadc399a01949851521d6301c02d,
+        type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8be3dadc399a01949851521d6301c02d, type: 3}
@@ -86481,7 +86481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1788673359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88126,7 +88126,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -88346,7 +88346,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -88508,7 +88508,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -88668,7 +88668,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -89177,22 +89177,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4854896231304646181, guid: 3a5c80e547bfda14a8dfea0ac6e6a481,
-        type: 3}
-      propertyPath: restoredElements
-      value: 
-      objectReference: {fileID: 484970677}
     - target: {fileID: 4614025769654903226, guid: 3a5c80e547bfda14a8dfea0ac6e6a481,
         type: 3}
       propertyPath: restoredElements
       value: 
       objectReference: {fileID: 484970677}
-    - target: {fileID: 8289904549488623422, guid: 3a5c80e547bfda14a8dfea0ac6e6a481,
+    - target: {fileID: 4854896231304646181, guid: 3a5c80e547bfda14a8dfea0ac6e6a481,
         type: 3}
       propertyPath: restoredElements
       value: 
       objectReference: {fileID: 484970677}
     - target: {fileID: 6460324255654645499, guid: 3a5c80e547bfda14a8dfea0ac6e6a481,
+        type: 3}
+      propertyPath: restoredElements
+      value: 
+      objectReference: {fileID: 484970677}
+    - target: {fileID: 8289904549488623422, guid: 3a5c80e547bfda14a8dfea0ac6e6a481,
         type: 3}
       propertyPath: restoredElements
       value: 

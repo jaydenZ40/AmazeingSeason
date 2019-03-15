@@ -15,17 +15,17 @@ public class Wizard : MonoBehaviour
     private bool appeared = false;
     private void Awake()
     {
-        if (null == instance)
-        {
+//        if (null == instance)
+//        {
             instance = this;
             m_Sprite = this.gameObject.GetComponent<SpriteRenderer>();
-        }
-        else
-            Destroy(this.gameObject);
-        DontDestroyOnLoad(this.gameObject);
+//        }
+//        else
+//           Destroy(this.gameObject);
+//        DontDestroyOnLoad(this.gameObject);
     }
     // Start is called before the first frame update
-    public void Level_1_Start()
+    public void Start()
     {
         Hide(false);
         //Play wizard entrance animation
@@ -76,6 +76,7 @@ public class Wizard : MonoBehaviour
     IEnumerator appearAnimation()
     {
         AudioManager.instance.explosion(true);
+        m_Sprite.sprite = null;
         for (int i = 1; i < 39; i++)
         {
             m_SmokePuff.puff();

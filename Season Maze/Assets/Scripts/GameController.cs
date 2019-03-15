@@ -12,8 +12,7 @@ public class GameController : MonoBehaviour
 
     public GameObject SeasonPanel;
 
-    private Elements Element;
-    public GameObject wizard;
+    private GameObject Element;
     public Camera mainCamera;
     public GameObject SeasonCompletePanel;
 
@@ -46,8 +45,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
-        ElementController.checkProcess.AddListener(CheckSeason);
         AudioManager.instance.zortonComplete.AddListener(StartTimer);
         Physics2D.IgnoreLayerCollision(8, 9);
         //PlayerController.instance.Hide(true);
@@ -55,31 +52,24 @@ public class GameController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        completedSeason = 0;
         if ("TutorialLevel" == scene.name)
         {
-            PlayerController.instance.Restart();
             isTutorial = true;
+            Element = GameObject.Find("Elements");
+            ElementController.checkProcess.AddListener(CheckSeason);
             AudioManager.instance.BGM_Play();
-            PlayerController.instance.Hide(false);
+            PlayerController.instance.StartPlayer();
         }
         else
             isTutorial = false;
         if ("Level 1" == scene.name)
         {
-            AudioManager.instance.spaceship(false);
-            Spaceship.instance.Level_1_Start();
-            Wizard.instance.Level_1_Start();
-            PlayerController.instance.Hide(false);
-            Spaceship.instance.mainCamera = PlayerController.GetCamera();
+            SetupLevelOne();
         }
         else
         {
             if (!isTutorial)
-                PlayerController.instance.Hide(true);
-            if(null != Wizard.instance)
-                Wizard.instance.Hide(true);
-            if (null != Spaceship.instance)
-                Spaceship.instance.Hide(true);
             if ("StoryScene1" == scene.name)
                 AudioManager.instance.spaceship(true, 0.125f);
             if ("StoryScene3" == scene.name)
@@ -88,11 +78,16 @@ public class GameController : MonoBehaviour
 
     }
 
-    internal void SetElememts(Elements elements)
+    private void SetupLevelOne()
     {
-        Element = elements;
-    }
+        Element = GameObject.Find("Elements");
+        PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
+        ElementController.checkProcess.AddListener(CheckSeason);
+        AudioManager.instance.spaceship(false);
+        PlayerController.instance.Hide(false);
+        Spaceship.instance.mainCamera = PlayerController.GetCamera();
 
+    }
 
     internal void SetTimer(Timer timer)
     {
@@ -107,10 +102,6 @@ public class GameController : MonoBehaviour
        Timer.instance.StartTimer();
     }
 
-    private void Update()
-    {
-    }
-
     void ShowSeasonPanel()
     {
         SeasonPanel.SetActive(true);
@@ -121,9 +112,9 @@ public class GameController : MonoBehaviour
     {
         AudioManager.instance.GameOver();
         SceneManager.LoadScene(3);
-        Wizard.instance.gameObject.SetActive(false);
-        PlayerController.instance.gameObject.SetActive(false);
-        Spaceship.instance.gameObject.SetActive(false);
+        //Wizard.instance.gameObject.SetActive(false);
+        //PlayerController.instance.gameObject.SetActive(false);
+        //Spaceship.instance.gameObject.SetActive(false);
     }
 
     public void Restart()

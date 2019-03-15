@@ -24,24 +24,33 @@ public class PlayerController : MonoBehaviour
     private Animator player_animator;
     private SpriteRenderer sprite;
     private Sprite lastSprite;
+    private bool playerStarted;
 
     void Awake()
     {
-        if (null == instance)
-        {
+ //       if (null == instance)
+ //       {
             instance = this;
             player_animator = this.GetComponent<Animator>();
             rb = this.transform.GetComponent<Rigidbody2D>();
             sprite = transform.GetComponent<SpriteRenderer>();
-        }
-        else
-            Destroy(this.gameObject);
-        DontDestroyOnLoad(this.gameObject);
+        playerStarted = false;
+        //       }
+        //       else
+        //           Destroy(this.gameObject);
+        //       DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
     {
-        //Restart();
+        Restart();
+        AudioManager.instance.PlayerStarted();
+        AudioManager.instance.zortonComplete.AddListener(StartPlayer);
+    }
+
+    internal void StartPlayer()
+    {
+        playerStarted = true;
     }
 
     public void Restart()
@@ -82,6 +91,7 @@ public class PlayerController : MonoBehaviour
 
     internal void Hide(bool hide)
     {
+        //Move player above the camera and out of sight
         Debug.Log("Hide Player? " + hide);
         if (null == camera)
             camera = instance.transform.GetComponentInChildren<Camera>();
@@ -109,6 +119,8 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        if (!playerStarted)
+            return;
         SetAllFalse();
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {

@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour
     private bool BGM_Started = false;
     private bool BGM_Stopped = true;
     private bool greetingStarted = false;
+    private bool timerRunning = false;
     void Awake()
     {
         if (null == instance)
@@ -25,17 +26,15 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        PlayerController.instance.onKeyPickup.AddListener(pickupKey);
-        PlayerController.instance.onElementPickup.AddListener(pickupElement);
-        PlayerController.instance.onElementReturn.AddListener(returnElement);
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
+        if (timerRunning)
+            timer += Time.deltaTime;
         //Debug.Log("timer = " + timer.ToString("0.0000"));
-        if (60 < timer && !BGM_Stopped)
+        if (45 < timer && !BGM_Stopped)
         {
             timer = 0;
             StartCoroutine(IncreasePitch());
@@ -49,25 +48,37 @@ public class AudioManager : MonoBehaviour
 
     }
 
+    internal void PlayerStarted()
+    {
+        PlayerController.instance.onKeyPickup.AddListener(pickupKey);
+        PlayerController.instance.onElementPickup.AddListener(pickupElement);
+        PlayerController.instance.onElementReturn.AddListener(returnElement);
+    }
+
     internal void GameOver()
     {
         BGM_Play(false);
         SFX_GameOver.Play();
     }
 
-
     public void BGM_Play(bool play = true)
     {
-        BGM_Stopped = play;
+        BGM_Stopped = !play;
         if (play)
+        {
             m_BGM_Manager.Play();
+            timerRunning = true;
+            timer = 0;
+        }
         else
         {
             m_BGM_Manager.Stop();
             StopAllCoroutines();
+            timerRunning = false;
+            timer = 0;
         }
 
-        }
+    }
 
         IEnumerator IncreasePitch()
     {

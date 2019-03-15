@@ -15,11 +15,15 @@ public class Spaceship : MonoBehaviour
     private Sprite[] m_Sprites;
     void Awake()
     {
-        if (null == instance)
+//        if (null == instance)
             instance = this;
-        else
-            Destroy(this.gameObject);
-        DontDestroyOnLoad(this.gameObject);
+//        else
+//            Destroy(this.gameObject);
+//        DontDestroyOnLoad(this.gameObject);
+        m_Sprite = this.gameObject.GetComponent<SpriteRenderer>();
+        transform.position = new Vector3(0.0f, 0.25f, 0);
+        damageLevel = maxDamage;
+        m_Sprite.sprite = m_Sprites[damageLevel];
     }
     // Start is called before the first frame update
     void Start()
@@ -61,14 +65,6 @@ public class Spaceship : MonoBehaviour
     {
         var vec = new Vector3(0.0f, 0.25f, 0);
         this.transform.Translate(vec);
-    }
-
-    internal void Level_1_Start()
-    {
-        m_Sprite = this.gameObject.GetComponent<SpriteRenderer>();
-        transform.position = new Vector3(0.0f, 0.25f, 0);
-        damageLevel = maxDamage;
-        m_Sprite.sprite = m_Sprites[damageLevel];
     }
 
     internal void Hide(bool hide)
