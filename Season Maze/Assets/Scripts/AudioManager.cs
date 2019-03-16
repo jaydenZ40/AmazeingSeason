@@ -69,6 +69,8 @@ public class AudioManager : MonoBehaviour
             m_BGM_Manager.Play();
             timerRunning = runTimer;
             timer = 0;
+            m_BGM_Manager.volume = .254f;
+            m_BGM_Manager.pitch = 1;
         }
         else
         {
