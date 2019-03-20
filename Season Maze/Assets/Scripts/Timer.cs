@@ -7,6 +7,7 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
+    public static Timer instance { get; private set; }
     private TextMeshProUGUI timeText;
     public float timeLeft = 240f; // 4 mins per round?
     private bool running = false;
@@ -14,6 +15,14 @@ public class Timer : MonoBehaviour
     void Awake()
     {
         timeText = this.GetComponent<TextMeshProUGUI>();
+//        if (null == instance)
+//        {
+            instance = this;
+            timeText = this.GetComponent<TextMeshProUGUI>();
+//        }
+//        else
+//            Destroy(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
     }
 
     public void StartTimer()
@@ -26,6 +35,12 @@ public class Timer : MonoBehaviour
         running = false;
     }
 
+    public void Restart()
+    {
+        timeLeft = 240f;
+        running = true;
+    }
+
     void Update()
     {
         if (!running)
@@ -36,8 +51,10 @@ public class Timer : MonoBehaviour
         timeText.text = string.Format("Timer: {0:00}", mins + ":" + sec.ToString("00"));
         if (timeLeft <= 0)
         {
+            running = false;
+            GameController.instance.GameOver();
             //print("game over");
-            SceneManager.LoadScene(3);
+            //SceneManager.LoadScene(3);
             // something happens?
         }
     }

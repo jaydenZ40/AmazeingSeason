@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,13 +7,15 @@ using UnityEngine.Events;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
-    public AudioSource m_BGM_Manager, m_SFX_KeyPickup, m_SFX_ElementPickup, 
-        m_SFX_ElementReturn, m_SFX_UnlockDoor, m_DLG_Zorton, m_SFX_Spaceship, m_SFX_Explosion;
+    public AudioSource m_BGM_Manager, m_SFX_KeyPickup, m_SFX_ElementPickup, SFX_YouWon, SFX_GameOver, 
+        m_SFX_ElementReturn, m_SFX_UnlockDoor, m_DLG_Zorton, m_SFX_Spaceship, m_SFX_Explosion, m_SFX_Crash,
+        DLG_Story1, DLG_Story2;
     private float timer = 0;
     public UnityEvent zortonComplete = new UnityEvent();
     private bool BGM_Started = false;
-    private bool BGM_Stopped = false;
+    private bool BGM_Stopped = true;
     private bool greetingStarted = false;
+    private bool timerRunning = false;
     void Awake()
     {
         if (null == instance)
@@ -24,17 +27,15 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        PlayerController.instance.onKeyPickup.AddListener(pickupKey);
-        PlayerController.instance.onElementPickup.AddListener(pickupElement);
-        PlayerController.instance.onElementReturn.AddListener(returnElement);
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
+        if (timerRunning)
+            timer += Time.deltaTime;
         //Debug.Log("timer = " + timer.ToString("0.0000"));
-        if (60 < timer && !BGM_Stopped)
+        if (45 < timer && !BGM_Stopped)
         {
             timer = 0;
             StartCoroutine(IncreasePitch());
@@ -45,34 +46,63 @@ public class AudioManager : MonoBehaviour
             BGM_Play();
             zortonComplete.Invoke();
         }
+
     }
 
-    public void BGM_Play(bool play = true)
+    internal void PlayerStarted()
     {
-        BGM_Stopped = play;
+        PlayerController.instance.onKeyPickup.AddListener(pickupKey);
+        PlayerController.instance.onElementPickup.AddListener(pickupElement);
+        PlayerController.instance.onElementReturn.AddListener(returnElement);
+    }
+
+    internal void GameOver()
+    {
+        BGM_Play(false);
+        SFX_GameOver.Play();
+    }
+
+    public void BGM_Play(bool play = true, bool runTimer = true)
+    {
+        BGM_Stopped = !play;
         if (play)
+        {
             m_BGM_Manager.Play();
+            timerRunning = runTimer;
+            timer = 0;
+            m_BGM_Manager.volume = .254f;
+            m_BGM_Manager.pitch = 1;
+        }
         else
         {
             m_BGM_Manager.Stop();
             StopAllCoroutines();
+            timerRunning = runTimer;
+            timer = 0;
         }
 
-        }
+    }
 
         IEnumerator IncreasePitch()
     {
         //Increase pitch 10 percent and restart
         for (int i = 0; 0 < m_BGM_Manager.volume; i++)
         {
+            if (BGM_Stopped)
+                break;
             m_BGM_Manager.volume -= 0.01f;
             yield return new WaitForSeconds(0.05f);
         }
-        m_BGM_Manager.pitch += 0.1f;
-        m_BGM_Manager.Stop();
-        m_BGM_Manager.Play();
+        if (!BGM_Stopped)
+        {
+            m_BGM_Manager.pitch += 0.1f;
+            m_BGM_Manager.Stop();
+            m_BGM_Manager.Play();
+        }
         for (int i = 0; 0.5 > m_BGM_Manager.volume; i++)
         {
+            if (BGM_Stopped)
+               break;
             m_BGM_Manager.volume += 0.01f;
             yield return new WaitForSeconds(0.05f);
         }
@@ -82,6 +112,14 @@ public class AudioManager : MonoBehaviour
     {
         m_SFX_KeyPickup.GetComponent<AudioSource>().Play();
     }
+
+    internal void Winner()
+    {
+        spaceship(false);
+        BGM_Play(false);
+        SFX_YouWon.Play();
+    }
+
     void pickupElement()
     {
         m_SFX_ElementPickup.GetComponent<AudioSource>().Play();
@@ -96,9 +134,10 @@ public class AudioManager : MonoBehaviour
         m_SFX_UnlockDoor.GetComponent<AudioSource>().Play();
     }
 
-    public void spaceship(bool play)
+    public void spaceship(bool play, float volume = 1.0f)
     {
-        if(play)
+        m_SFX_Spaceship.GetComponent<AudioSource>().volume = volume;
+        if (play)
             m_SFX_Spaceship.GetComponent<AudioSource>().Play();
         else
             m_SFX_Spaceship.GetComponent<AudioSource>().Stop();
@@ -114,6 +153,7 @@ public class AudioManager : MonoBehaviour
     {
         m_DLG_Zorton.Play();
         greetingStarted = true;
+        BGM_Started = false;
     }
 
     public void explosion(bool play)
@@ -122,5 +162,10 @@ public class AudioManager : MonoBehaviour
             m_SFX_Explosion.Play();
         else
             m_SFX_Explosion.Stop();
+    }
+
+    public void crash()
+    {
+        m_SFX_Crash.Play();
     }
 }

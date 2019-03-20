@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,16 +12,32 @@ public class Wizard : MonoBehaviour
     [SerializeField]
     private Sprite[] m_Sprites;
     public SmokePuff m_SmokePuff;
+    private bool appeared = false;
     private void Awake()
     {
-        instance = this;
-        m_Sprite = this.gameObject.GetComponent<SpriteRenderer>();
+//        if (null == instance)
+//        {
+            instance = this;
+            m_Sprite = this.gameObject.GetComponent<SpriteRenderer>();
+//        }
+//        else
+//           Destroy(this.gameObject);
+//        DontDestroyOnLoad(this.gameObject);
     }
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        PlayerController.instance.onElementReturn.AddListener(zap);
-        appear();
+        Hide(false);
+        //Play wizard entrance animation
+        if (!appeared)
+        {
+            PlayerController.instance.onElementReturn.AddListener(zap);
+            appear();
+            appeared = true;
+        }
+        //Skip wizard entrance on restart
+        else
+            m_Sprite.sprite = m_Sprites[0];
     }
 
     // Update is called once per frame
@@ -31,6 +48,8 @@ public class Wizard : MonoBehaviour
 
     public void zap()
     {
+        if (GameController.instance.isTutorial)
+            return;
         StartCoroutine(zapAnimation());
     }
 
@@ -57,16 +76,34 @@ public class Wizard : MonoBehaviour
     IEnumerator appearAnimation()
     {
         AudioManager.instance.explosion(true);
+        m_Sprite.sprite = null;
         for (int i = 1; i < 39; i++)
         {
             m_SmokePuff.puff();
             yield return new WaitForSeconds(0.05f);
             if (20 == i)
             {
+                Debug.Log("Wizard appears");
                 m_Sprite.sprite = m_Sprites[0];//pop in wizard halfway thru
                 AudioManager.instance.wizardGreeting();//start wizard dialog
                 AudioManager.instance.explosion(false);
             }
+        }
+    }
+
+    internal void Hide(bool hide)
+    {
+        var pos = transform.position;
+        if (hide)
+        {
+            pos.z = -20;
+            this.transform.position = pos;
+        }
+        else
+        {
+            pos.z = 0;
+            Debug.Log(pos.ToString());
+            this.transform.position = pos;
         }
     }
 }

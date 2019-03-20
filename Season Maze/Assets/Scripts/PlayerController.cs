@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
     public Rigidbody2D rb;
+    public Camera camera;
     public float moveSpeed = 2.5f;
     public string elementName = "empty";
     public UnityEvent onWrapGate = new UnityEvent();
@@ -15,18 +17,53 @@ public class PlayerController : MonoBehaviour
     public UnityEvent onElementPickup = new UnityEvent();
     public UnityEvent onElementReturn = new UnityEvent();
     public StringUnityEvent OperateElement = new StringUnityEvent();
-    public GameObject elementIcon, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
+    private GameObject elementHolder, keyHolder, lockHolder, keyParent; //keyParent: an empty gameobject to hold four keys
 
     private GameObject curElementBox;
     private bool[] haveKeys = new bool[4] { false, false, false, false };
     private Animator player_animator;
+    private SpriteRenderer sprite;
+    private Sprite lastSprite;
+    private bool playerStarted;
 
     void Awake()
     {
-        instance = this;
-        player_animator = this.GetComponent<Animator>();
-        rb = this.transform.GetComponent<Rigidbody2D>();
+ //       if (null == instance)
+ //       {
+            instance = this;
+            player_animator = this.GetComponent<Animator>();
+            rb = this.transform.GetComponent<Rigidbody2D>();
+            sprite = transform.GetComponent<SpriteRenderer>();
+        playerStarted = false;
+        //       }
+        //       else
+        //           Destroy(this.gameObject);
+        //       DontDestroyOnLoad(this.gameObject);
     }
+
+    private void Start()
+    {
+        Restart();
+        AudioManager.instance.PlayerStarted();
+        AudioManager.instance.zortonComplete.AddListener(StartPlayer);
+    }
+
+    internal void StartPlayer()
+    {
+        playerStarted = true;
+    }
+
+    public void Restart()
+    {
+        //PlayerController.instance.gameObject.SetActive(true);
+        keyHolder = GameObject.Find("keyHolder");
+        keyParent = GameObject.Find("Keys");
+        elementHolder = GameObject.Find("elementIcon");
+        lockHolder = GameObject.Find("LockHolders");
+        curElementBox = null;
+        instance.transform.position = new Vector3(-2.0f, -2.0f, 0);
+    }
+
 
     void FixedUpdate()
     {
@@ -35,10 +72,55 @@ public class PlayerController : MonoBehaviour
         {
             DropElement();
         }
+        if (null == camera)
+            return;
+        PlayerController.instance.camera.orthographicSize = (float)GameController.instance.Challenge;
+        //if (NoDestroyController.instance.isCrazy)
+        //{
+        //    PlayerController.instance.camera.orthographicSize = 2;
+        //}
+        //else if (NoDestroyController.instance.isHard)
+        //{
+        //    PlayerController.instance.camera.orthographicSize = 4;
+        //}
+        //else
+        //{
+        //    PlayerController.instance.camera.orthographicSize = 6;
+        //}
+    }
+
+    internal void Hide(bool hide)
+    {
+        //Move player above the camera and out of sight
+        Debug.Log("Hide Player? " + hide);
+        if (null == camera)
+            camera = instance.transform.GetComponentInChildren<Camera>();
+        var pos = transform.position;
+        if (hide)
+        {
+            pos.z = -20;
+            this.transform.position = pos;
+            pos.z = -10;
+            instance.camera.transform.position = pos;
+        }
+        else
+        {
+            pos.z = 0;
+            this.transform.position = pos;
+            pos.z = -10;
+            instance.camera.transform.position = pos;
+        }
+    }
+
+    internal static Component GetCamera()
+    {
+        return instance.transform.GetComponentInChildren<Camera>();
     }
 
     void Move()
     {
+        if (!playerStarted)
+            return;
         SetAllFalse();
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
@@ -132,10 +214,10 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            if (elementIcon.transform.GetChild(i).name[1] == elementName[1])
+            if (elementHolder.transform.GetChild(i).name[1] == elementName[1])
             {
-                curElementBox = elementIcon.transform.GetChild(i).gameObject;
-                elementIcon.transform.GetChild(i).gameObject.SetActive(true);
+                curElementBox = elementHolder.transform.GetChild(i).gameObject;
+                elementHolder.transform.GetChild(i).gameObject.SetActive(true);
                 break;
             }
         }
@@ -143,7 +225,8 @@ public class PlayerController : MonoBehaviour
 
     public void HideIcon(bool dropping = false)
     {
-        curElementBox.SetActive(false);
+        if(null != curElementBox)
+            curElementBox.SetActive(false);
         if (dropping)
             onElementReturn.Invoke();
     }
