@@ -8,7 +8,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance { get; private set; }
     public AudioSource m_BGM_Manager, m_SFX_KeyPickup, m_SFX_ElementPickup, SFX_YouWon, SFX_GameOver, 
-        m_SFX_ElementReturn, m_SFX_UnlockDoor, m_DLG_Zorton, m_SFX_Spaceship, m_SFX_Explosion, m_SFX_Crash;
+        m_SFX_ElementReturn, m_SFX_UnlockDoor, m_DLG_Zorton, m_SFX_Spaceship, m_SFX_Explosion, m_SFX_Crash,
+        DLG_Story1, DLG_Story2;
     private float timer = 0;
     public UnityEvent zortonComplete = new UnityEvent();
     private bool BGM_Started = false;

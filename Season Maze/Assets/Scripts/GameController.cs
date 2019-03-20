@@ -15,6 +15,10 @@ public class GameController : MonoBehaviour
     private GameObject Element;
     private Camera mainCamera;
     private GameObject SeasonCompletePanel;
+    private GameObject MeteorPrefab;
+    private int meteor = 0;
+    private GameObject[] meteors;
+    private bool meteorShower = false;
 
     private Timer timer;
     public bool isTutorial { get; private set; }
@@ -43,6 +47,12 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
+    private void Update()
+    {
+        if (meteorShower)
+            MeteorShower();
+    }
+
     internal void SeasonPanelActive(bool active)
     {
         SeasonPanel = GameObject.Find("Canvas").transform.Find("SeasonPanel").gameObject;
@@ -59,6 +69,7 @@ public class GameController : MonoBehaviour
     {
         AudioManager.instance.zortonComplete.AddListener(StartTimer);
         Physics2D.IgnoreLayerCollision(8, 9);
+        MeteorPrefab = (GameObject)Resources.Load("meteorprefab");
         //PlayerController.instance.Hide(true);
     }
 
@@ -81,13 +92,21 @@ public class GameController : MonoBehaviour
         {
             AudioManager.instance.BGM_Play(false, false);
             AudioManager.instance.spaceship(true, 0.125f);
+            AudioManager.instance.DLG_Story1.Play();
         }
-        if ("StoryScene3" == scene.name)
-            StartCoroutine(CrashShip());
+        meteorShower = false;
+        if ("StoryScene2" == scene.name)
+        {
+            meteorShower = true;
+            //meteors = new GameObject[100];
+            //StartCoroutine(MeteorShower());
+            //StartCoroutine(CrashShip());
+        }
         if ("Start" == scene.name)
             AudioManager.instance.BGM_Play(true, false);
  
     }
+
 
     private void SetupLevelOne()
     {
@@ -212,5 +231,20 @@ public class GameController : MonoBehaviour
         }
         AudioManager.instance.spaceship(false);
         AudioManager.instance.crash();
+    }
+    void MeteorShower()
+    {
+ //       if (100 > meteor)
+        {
+            var ranX = UnityEngine.Random.Range(0, 20f) - 8;
+            var ranY = UnityEngine.Random.Range(0, 8f);
+            var pos = new Vector3(4 + ranX, 4 + ranY, 0);
+            var meteor = Instantiate(MeteorPrefab, pos, Quaternion.identity);
+            var sr = meteor.GetComponent<SpriteRenderer>();
+            sr.transform.localScale *= 10;
+        }
+//        meteor++;
+//        Debug.Log(meteor);
+        //yield return new WaitForSeconds(0.05f);
     }
 }
