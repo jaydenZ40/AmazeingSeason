@@ -153,6 +153,7 @@ public class AudioManager : MonoBehaviour
     {
         m_DLG_Zorton.Play();
         greetingStarted = true;
+        BGM_Started = false;
     }
 
     public void explosion(bool play)

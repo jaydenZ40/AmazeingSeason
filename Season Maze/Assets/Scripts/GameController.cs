@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
     private int meteor = 0;
     private GameObject[] meteors;
     private bool meteorShower = false;
+    private bool checkSeasonListening = false;
 
     private Timer timer;
     public bool isTutorial { get; private set; }
@@ -80,9 +81,14 @@ public class GameController : MonoBehaviour
         {
             isTutorial = true;
             Element = GameObject.Find("Elements");
-            ElementController.checkProcess.AddListener(CheckSeason);
+            if (!checkSeasonListening)
+            {
+                ElementController.checkProcess.AddListener(CheckSeason);
+                checkSeasonListening = true;
+            }
             AudioManager.instance.BGM_Play();
             PlayerController.instance.StartPlayer();
+            completedSeason = 0;
         }
         else
             isTutorial = false;
@@ -111,12 +117,16 @@ public class GameController : MonoBehaviour
     private void SetupLevelOne()
     {
         Element = GameObject.Find("Elements");
+        if (!checkSeasonListening)
+        {
+            ElementController.checkProcess.AddListener(CheckSeason);
+            checkSeasonListening = true;
+        }
         PlayerController.instance.onWrapGate.AddListener(ShowSeasonPanel);
-        ElementController.checkProcess.AddListener(CheckSeason);
         AudioManager.instance.spaceship(false);
         PlayerController.instance.Hide(false);
         Spaceship.instance.mainCamera = PlayerController.GetCamera();
-
+        completedSeason = 0;
     }
 
     internal void SetTimer(Timer timer)
